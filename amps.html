@@ -1,9 +1,28 @@
 <style type="text/css">
+	h1, h2 {
+		text-transform: uppercase;
+	}
+
+	button {
+		background: ##077a86;
+		color: #fff;
+	}
+
 	.content-wrapper {
 	    height: 100%;
 	    width: 50%;
 	    background: #9bcace;
 	    padding: 1em;
+	}
+
+	.input-wrapper {
+	    display: flex;
+	    flex-direction: column;
+	    width: 33%;
+	}
+
+	.button-wrapper {
+		margin-top: 1em;
 	}
 </style>
 
@@ -34,20 +53,18 @@
 	ENDIF
 
 ]%%
-Random: %%=v(@Random)=%%
 	<div>
 		<h1>Email Preference Center</h1>
-		%%=v(@Status)=%%
 	</div>
 	<div>
 		<div>
 			<h2>Update Your Email Address</h2>	
 		</div>
-		<div>
+		<div class="input-wrapper">
 			<label>Email Address</label>
 			<input type="email" name="email" value="%%=v(@EmailAddress)=%%">
 		</div>
-		<div>
+		<div class="button-wrapper">
 			<button>Update</button>
 		</div>
 	</div>
@@ -57,11 +74,11 @@ Random: %%=v(@Random)=%%
 		</div>
 		<div>
 			<form>
-				<div>
+				<div class="input-wrapper">
 					<input type="checkbox" name="quarterlyNewsletters" id="quarterlyNewsletters">
 					<label for="quarterlyNewsletters">Quarterly Newsletters</label>
 				</div>
-				<div>
+				<div class="button-wrapper">
 					<button onclick="handleSubmitPreferences()">Save Preferences</button>
 				</div>
 			</form>
