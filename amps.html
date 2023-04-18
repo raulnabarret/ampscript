@@ -89,10 +89,18 @@
     SetObjectProperty(@rr,"Filter",@cf)
     
     SET @listFields = InvokeRetrieve(@rr)
-    IF NOT(RowCount(@listFields)) THEN
-    	OUTPUT(V('NOT REGISTERED'))
+    for @i = 1 to RowCount(@listFields) do
+
+	  set @dataExtensionField = Row(@listFields, @i)
+	  set @Status = Field(@dataExtensionField, "Status")
+
+	  output(concat("<br>Status: ", @Status))
+
+	next @i
+    IF NOT(RowCount(@listFields)) AND @Status == 'Active' THEN
+    	OUTPUT(V('REGISTERED'))
     ELSE
-		OUTPUT(V('REGISTERED'))
+		OUTPUT(V('NOT REGISTERED'))
 	ENDIF	
 
 ]%%
