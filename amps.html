@@ -6,14 +6,22 @@
 	    padding: 1em;
 	}
 </style>
+<script>
+	var queryString = window.location.search;
+	var urlParams = new URLSearchParams(queryString);
+	var emailaddr = urlParams.get('emailaddr');
+	console.log(emailaddr);
+</script>
 <div class="content-wrapper">
 %%[	
 	SET @Random = RANDOM(100, 999)
-	SET @EmailAddress1 = QUERYPARAMETER("email")
-	SET @EmailAddress2 = RequestParameter("email")
+	SET @EmailAddress1 = QUERYPARAMETER("emailaddr")
+	SET @EmailAddress2 = RequestParameter("emailaddr")
+	SET @EmailAddress3 = [emailaddr]
 ]%%
 Random: %%=v(@Random)=%%
 Email Address1: %%=v(@EmailAddress1)=%%
 Email Address2: %%=v(@EmailAddress2)=%%
+Email Address3: %%=v(@EmailAddress3)=%%
 </div>
 
