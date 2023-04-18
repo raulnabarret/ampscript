@@ -102,25 +102,25 @@ Random: %%=v(@Random)=%%
 		    SET @listFields = InvokeRetrieve(@rr)
 		 
 		    /* Update only when it is not already present */
-		    IF NOT(RowCount(@listFields)) THEN
 		        SET @sub = CreateObject("Subscriber")
 		        SetObjectProperty(@sub,"SubscriberKey",@SubscriberKey)
 
 		        set @lSub = CreateObject("SubscriberList")
 		        SetObjectProperty(@lSub,"ID",@ListID)
-		        SetObjectProperty(@lSub,"Status","Unsubscribed")
+			    IF @quarterlyNewsletters THEN
+			        SetObjectProperty(@lSub,"Status","Active")
+		        ELSE
+		        	SetObjectProperty(@lSub,"Status","Unsubscribed")
+	        	ENDIF
 		        AddObjectArrayItem(@sub,"Lists",@lSub)
 
 		        SET @updateStatus = InvokeUpdate(@sub)
 
 		        IF @updateStatus == "OK" THEN
-		          Output(v("Subscriber added to the list successfully!"))
+		          Output(v("Subscriber successfully updated!"))
 		        ELSE
 		          Output(v("There was a problem adding the subscriber added to the list!"))
 		        ENDIF
-		    ELSE
-		        Output(v("Subscriber already exists in list"))
-		    ENDIF
 		]%%
 	}
 </script>
