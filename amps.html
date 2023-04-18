@@ -116,11 +116,6 @@ Random: %%=v(@Random)=%%
 
 		        SET @updateStatus = InvokeUpdate(@sub)
 
-		        IF @updateStatus == "OK" THEN
-		          Output(v("Subscriber successfully updated!"))
-		        ELSE
-		          Output(v("There was a problem adding the subscriber added to the list!"))
-		        ENDIF
 		]%%
 	}
 </script>
