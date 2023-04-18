@@ -1,8 +1,16 @@
-<div>
+<style type="text/css">
+	.content-wrapper {
+	    height: 100%;
+	    width: 50%;
+	    background: #9bcace;
+	    padding: 1em;
+	}
+</style>
+<div class="content-wrapper">
 %%[	
 	SET @Random = RANDOM(100, 999)
 	SET @EmailAddress = QUERYPARAMETER("emailaddr")
 ]%%
-Hello World Test2 %%=v(@Random)=%%
+Random: %%=v(@Random)=%%
 Email Address: %%=v(@EmailAddress)=%%
 </div>
