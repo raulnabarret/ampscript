@@ -9,8 +9,11 @@
 <div class="content-wrapper">
 %%[	
 	SET @Random = RANDOM(100, 999)
-	SET @EmailAddress = QUERYPARAMETER("emailaddr")
+	SET @EmailAddress1 = QUERYPARAMETER("email")
+	SET @EmailAddress2 = RequestParameter("email")
 ]%%
 Random: %%=v(@Random)=%%
-Email Address: %%=v(@EmailAddress)=%%
+Email Address1: %%=v(@EmailAddress1)=%%
+Email Address2: %%=v(@EmailAddress2)=%%
 </div>
+
