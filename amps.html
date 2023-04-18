@@ -1,7 +1,7 @@
 <div>
 %%[	
 	SET @Random = RANDOM(100, 999)
-	SET @EmailAddress = RequestParameter("emailaddr")
+	SET @EmailAddress = QUERYPARAMETER("emailaddr")
 ]%%
 Hello World Test2 %%=v(@Random)=%%
 Email Address: %%=v(@EmailAddress)=%%
