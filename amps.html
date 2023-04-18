@@ -56,13 +56,13 @@ Random: %%=v(@Random)=%%
 			<h2>Newsletters</h2>	
 		</div>
 		<div>
-			<form onsubmit="return handleSubmitPreferences(this)">
+			<form>
 				<div>
 					<input type="checkbox" name="quarterlyNewsletters" id="quarterlyNewsletters">
 					<label for="quarterlyNewsletters">Quarterly Newsletters</label>
 				</div>
 				<div>
-					<button type="submit">Save Preferences</button>
+					<button onclick="handleSubmitPreferences()">Save Preferences</button>
 				</div>
 			</form>
 		</div>
