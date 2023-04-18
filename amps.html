@@ -12,10 +12,31 @@
 	SET @Random = RANDOM(100, 999)
 	SET @EmailAddress = 'raulnabarret@gmail.com'
 
+
+	SET @rrObj = CreateObject("RetrieveRequest") 
+
+	SetObjectProperty(@rrObj, "ObjectType", "Subscriber")
+	AddObjectArrayItem(@rrObj,"Properties","SubscriberKey")
+
+	SET @cObj = CreateObject("SimpleFilterPart")
+	SetObjectProperty(@cObj, "Property", "SubscriberKey")
+	SetObjectProperty(@cObj, "SimpleOperator", "equals")
+	AddObjectArrayItem(@cObj, "Value",@EmailAddress)
+
+	SetObjectProperty(@rrObj, "Filter", @cObj)
+
+	SET @ResultSet = InvokeRetrieve(@rrObj)
+
+	IF(Rowcount(@ResultSet)>0) THEN       
+	    SET @row = row(@ResultSet,1)        
+	    SET @Status = Field(@row,"Status")
+	ENDIF
+
 ]%%
 Random: %%=v(@Random)=%%
 	<div>
 		<h1>Email Preference Center</h1>
+		%%=v(@Status)=%%
 	</div>
 	<div>
 		<div>
