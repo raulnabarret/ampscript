@@ -97,10 +97,10 @@
 	  output(concat("<br>Status: ", @Status))
 
 	next @i
-    IF NOT(RowCount(@listFields)) AND @Status == 'Active' THEN
-    	OUTPUT(V('REGISTERED'))
+    IF NOT(RowCount(@listFields)) AND @Status == 'Unsubscribe' THEN
+    	OUTPUT(V('NOT REGISTERED'))
     ELSE
-		OUTPUT(V('NOT REGISTERED'))
+		OUTPUT(V('REGISTERED'))
 	ENDIF	
 
 ]%%
