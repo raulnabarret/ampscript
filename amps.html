@@ -73,7 +73,7 @@ Random: %%=v(@Random)=%%
 		var quarterlyNewsletters = document.querySelector('#quarterlyNewsletters').checked;
 		console.log(quarterlyNewsletters);
 		%%[
- 			SET @quarterlyNewsletters = RequestParameter('quarterlyNewsletters')
+ 			SET @quarterlyNewsletters = quarterlyNewsletters
 		    SET @ListID = "12608"
 		    SET @SubscriberKey = @EmailAddress
 		 
@@ -101,7 +101,7 @@ Random: %%=v(@Random)=%%
 		    
 		    SET @listFields = InvokeRetrieve(@rr)
 		 
-		    IF @quarterlyNewsletters == 'on' THEN
+		    IF @quarterlyNewsletters THEN
 		        SET @sub = CreateObject("Subscriber")
 		        SetObjectProperty(@sub,"SubscriberKey",@SubscriberKey)
 		        set @lSub = CreateObject("SubscriberList")
