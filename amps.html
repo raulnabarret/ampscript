@@ -3,12 +3,8 @@
 		text-transform: uppercase;
 	}
 
-	button {
-		background: ##077a86;
-		color: #fff;
-	}
-
 	.content-wrapper {
+		font-family: 'Arial';
 	    height: 100%;
 	    width: 50%;
 	    background: #9bcace;
@@ -22,7 +18,16 @@
 	}
 
 	.button-wrapper {
-		margin-top: 1em;
+		margin-top: 0.5em;
+	}
+
+	button {
+		background: #077a86;
+	    color: #fff;
+	    padding: 0.5em;
+	    min-width: 150px;
+	    border-radius: 0;
+	    border: none;
 	}
 </style>
 
@@ -51,6 +56,38 @@
 	    SET @row = row(@ResultSet,1)        
 	    SET @Status = Field(@row,"Status")
 	ENDIF
+
+    SET @ListID = "12608"
+    SET @SubscriberKey = @EmailAddress
+ 
+    SET @rr = CreateObject("RetrieveRequest")
+    SetObjectProperty(@rr,"ObjectType","ListSubscriber")
+    AddObjectArrayItem(@rr,"Properties","SubscriberKey")
+    AddObjectArrayItem(@rr,"Properties","ListID")
+    
+    SET @sfpl = CreateObject("SimpleFilterPart")
+    SetObjectProperty(@sfpl,"Property","ListID")
+    SetObjectProperty(@sfpl,"SimpleOperator","equals")
+    AddObjectArrayItem(@sfpl,"Value",@ListID)
+ 
+    SET @sfpr = CreateObject("SimpleFilterPart")
+    SetObjectProperty(@sfpr,"Property","SubscriberKey")
+    SetObjectProperty(@sfpr,"SimpleOperator","equals")
+    AddObjectArrayItem(@sfpr,"Value",@SubscriberKey)
+ 
+    SET @cf = CreateObject("ComplexFilterPart")
+    SetObjectProperty(@cf,"LeftOperand",@sfpl)
+    SetObjectProperty(@cf,"RightOperand",@sfpr)
+    SetObjectProperty(@cf,"LogicalOperator","AND")
+ 
+    SetObjectProperty(@rr,"Filter",@cf)
+    
+    SET @listFields = InvokeRetrieve(@rr)
+    IF NOT(RowCount(@listFields)) THEN
+    	OUTPUT(V('NOT REGISTERED'))
+    ELSE
+		OUTPUT(V('REGISTERED'))
+	ENDIF	
 
 ]%%
 	<div>
@@ -90,32 +127,6 @@
 		var quarterlyNewsletters = document.querySelector('#quarterlyNewsletters').checked;
 		console.log(quarterlyNewsletters);
 		%%[
-		    SET @ListID = "12608"
-		    SET @SubscriberKey = @EmailAddress
-		 
-		    SET @rr = CreateObject("RetrieveRequest")
-		    SetObjectProperty(@rr,"ObjectType","ListSubscriber")
-		    AddObjectArrayItem(@rr,"Properties","SubscriberKey")
-		    AddObjectArrayItem(@rr,"Properties","ListID")
-		    
-		    SET @sfpl = CreateObject("SimpleFilterPart")
-		    SetObjectProperty(@sfpl,"Property","ListID")
-		    SetObjectProperty(@sfpl,"SimpleOperator","equals")
-		    AddObjectArrayItem(@sfpl,"Value",@ListID)
-		 
-		    SET @sfpr = CreateObject("SimpleFilterPart")
-		    SetObjectProperty(@sfpr,"Property","SubscriberKey")
-		    SetObjectProperty(@sfpr,"SimpleOperator","equals")
-		    AddObjectArrayItem(@sfpr,"Value",@SubscriberKey)
-		 
-		    SET @cf = CreateObject("ComplexFilterPart")
-		    SetObjectProperty(@cf,"LeftOperand",@sfpl)
-		    SetObjectProperty(@cf,"RightOperand",@sfpr)
-		    SetObjectProperty(@cf,"LogicalOperator","AND")
-		 
-		    SetObjectProperty(@rr,"Filter",@cf)
-		    
-		    SET @listFields = InvokeRetrieve(@rr)
 		 
 		    IF RequestParameter('quarterlyNewsletters') == 'on' THEN
 		        SET @sub = CreateObject("Subscriber")
