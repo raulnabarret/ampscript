@@ -101,7 +101,7 @@ Random: %%=v(@Random)=%%
 		    
 		    SET @listFields = InvokeRetrieve(@rr)
 		 
-		    IF @quarterlyNewsletters THEN
+		    IF @quarterlyNewsletters == 'on' THEN
 		        SET @sub = CreateObject("Subscriber")
 		        SetObjectProperty(@sub,"SubscriberKey",@SubscriberKey)
 		        set @lSub = CreateObject("SubscriberList")
