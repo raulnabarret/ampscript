@@ -11,10 +11,9 @@
 %%[	
 	SET @Random = RANDOM(100, 999)
 	SET @EmailAddress = 'raulnabarret@gmail.com'
-    SET @data = LookupRows("_Subscribers", "EmailAddress", @EmailAddress)
+    SET @data = Lookup("_Subscribers", "EmailAddress", @EmailAddress)
     SET @row = Row(@data, 1)
     SET @FirstName = Field(@row, "FirstName")
-    SET @LastName = Field(@row, "LastName")
 
 ]%%
 Random: %%=v(@Random)=%%
