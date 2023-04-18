@@ -9,6 +9,7 @@
 
 <div class="content-wrapper">
 %%[	
+	//12608
 	SET @Random = RANDOM(100, 999)
 	SET @EmailAddress = 'raulnabarret@gmail.com'
 
@@ -55,12 +56,25 @@ Random: %%=v(@Random)=%%
 			<h2>Newsletters</h2>	
 		</div>
 		<div>
-			<input type="checkbox" id="quarterlyNewsletters">
-			<label for="quarterlyNewsletters">Quarterly Newsletters</label>
-		</div>
-		<div>
-			<button>Save Preferences</button>
+			<form onsubmit="return handleSubmitPreferences(this)">
+				<div>
+					<input type="checkbox" name="quarterlyNewsletters" id="quarterlyNewsletters">
+					<label for="quarterlyNewsletters">Quarterly Newsletters</label>
+				</div>
+				<div>
+					<button type="submit">Save Preferences</button>
+				</div>
+			</form>
 		</div>
 	</div>	
 </div>
+<script type="text/javascript">
+	function handleSubmitPreferences() {
+		var quarterlyNewsletters = document.querySelector('#quarterlyNewsletters').value;
+		console.log(quarterlyNewsletters);
+		%%[
+ 			SET @quarterlyNewsletters = RequestParameter('quarterlyNewsletters')
+		]%%
+	}
+</script>
 
