@@ -74,6 +74,7 @@ Random: %%=v(@Random)=%%
 		console.log(quarterlyNewsletters);
 		%%[
  			SET @quarterlyNewsletters = RequestParameter('quarterlyNewsletters')
+ 			OutputLine(@quarterlyNewsletters)
 		    SET @ListID = "12608"
 		    SET @SubscriberKey = @EmailAddress
 		 
@@ -101,20 +102,7 @@ Random: %%=v(@Random)=%%
 		    
 		    SET @listFields = InvokeRetrieve(@rr)
 		 
-		    /* Update only when it is not already present */
-		        SET @sub = CreateObject("Subscriber")
-		        SetObjectProperty(@sub,"SubscriberKey",@SubscriberKey)
 
-		        set @lSub = CreateObject("SubscriberList")
-		        SetObjectProperty(@lSub,"ID",@ListID)
-			    IF @quarterlyNewsletters THEN
-			        SetObjectProperty(@lSub,"Status","Active")
-		        ELSE
-		        	SetObjectProperty(@lSub,"Status","Unsubscribed")
-	        	ENDIF
-		        AddObjectArrayItem(@sub,"Lists",@lSub)
-
-		        SET @updateStatus = InvokeUpdate(@sub)
 
 		]%%
 	}
