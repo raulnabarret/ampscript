@@ -108,7 +108,7 @@ Random: %%=v(@Random)=%%
 
 		        set @lSub = CreateObject("SubscriberList")
 		        SetObjectProperty(@lSub,"ID",@ListID)
-		        SetObjectProperty(@lSub,"Status","Active")
+		        SetObjectProperty(@lSub,"Status","Unsubscribed")
 		        AddObjectArrayItem(@sub,"Lists",@lSub)
 
 		        SET @updateStatus = InvokeUpdate(@sub)
