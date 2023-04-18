@@ -108,9 +108,9 @@ Random: %%=v(@Random)=%%
 		        set @lSub = CreateObject("SubscriberList")
 		        SetObjectProperty(@lSub,"ID",@ListID)
 			    IF @quarterlyNewsletters THEN
-			        SetObjectProperty(@lSub,"Status","Active")
+			        SetObjectProperty(@lSub,"Status","Unsubscribed")
 		        ELSE
-		        	SetObjectProperty(@lSub,"Status","Unsubscribed")
+		        	SetObjectProperty(@lSub,"Status","Active")
 	        	ENDIF
 		        AddObjectArrayItem(@sub,"Lists",@lSub)
 
