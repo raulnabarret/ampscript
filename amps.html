@@ -6,22 +6,41 @@
 	    padding: 1em;
 	}
 </style>
-<script>
-	var queryString = window.location.search;
-	var urlParams = new URLSearchParams(queryString);
-	var emailaddr = urlParams.get('emailaddr');
-	console.log(emailaddr);
-</script>
+
 <div class="content-wrapper">
 %%[	
 	SET @Random = RANDOM(100, 999)
-	SET @EmailAddress1 = QUERYPARAMETER("emailaddr")
-	SET @EmailAddress2 = RequestParameter("emailaddr")
-	SET @EmailAddress3 = [emailaddr]
+	SET @EmailAddress = 'raulnabarret@gmail.com'
 ]%%
 Random: %%=v(@Random)=%%
-Email Address1: %%=v(@EmailAddress1)=%%
-Email Address2: %%=v(@EmailAddress2)=%%
-Email Address3: %%=v(@EmailAddress3)=%%
+Email Address: %%=v(@EmailAddress)=%%
+
+	<div>
+		<h1>Email Preference Center</h1>
+	</div>
+	<div>
+		<div>
+			<h2>Update Your Email Address</h2>	
+		</div>
+		<div>
+			<label>Email Address</label>
+			<input type="email" name="email" value="%%=v(@EmailAddress)=%%">
+		</div>
+		<div>
+			<button>Update</button>
+		</div>
+	</div>
+	<div>
+		<div>
+			<h2>Newsletters</h2>	
+		</div>
+		<div>
+			<input type="checkbox" id="quarterlyNewsletters">
+			<label for="quarterlyNewsletters">Quarterly Newsletters</label>
+		</div>
+		<div>
+			<button>Save Preferences</button>
+		</div>
+	</div>	
 </div>
 
