@@ -20,27 +20,18 @@
       }
     
       // POST VARIABLES
-      var subscriberKey = Platform.Request.GetFormField('subscriberKey') || "";
-      var firstName = Platform.Request.GetFormField('firstName') || "";
-      var lastName = Platform.Request.GetFormField('lastName') || "";
+      var subscriberKey = Platform.Request.GetFormField('subscriberKey') || "";    
       var email = Platform.Request.GetFormField('email') || "";
-      var website = Platform.Request.GetFormField('website') || "";
-      var gender = Platform.Request.GetFormField('gender') || "";
-      var preference = Platform.Request.GetFormField('preference') || false;
-      var connection = Platform.Request.GetFormField('connection') || false;
-      var newsletter = Platform.Request.GetFormField('newsletter') || false;
+      var quarterlyNewsletter = Platform.Request.GetFormField('quarterlyNewsletter') || false; 
       var unsubscribe = Platform.Request.GetFormField('unsubscribe') || false;
       var subscribeTo = Platform.Request.GetFormField('subscribe') || false;
 
       if(subscriberKey) {
         var subscriberData = {
           "Attributes": {
-            "First Name" : firstName, 
-            "Last Name" : lastName,
-            "Website" : website,
             "Preference" : preference,
             "Connection" : connection,
-            "Send Email Newsletter" : newsletter
+            "Send Email Newsletter" : quarterlyNewsletter
           }
         };
 
@@ -73,19 +64,11 @@
       <input type="hidden" name="subscriberKey" value="%%=v(@subscriberkey)=%%">
       
       <h2>Update your profile:</h2>
-      <label>First Name: </label><input type="text" name="firstName" value="%%=v(@firstName)=%%"><br>
-      <label>Last Name: </label><input type="text" name="lastName" value="%%=v(@lastName)=%%"><br>
       <label>* Email: </label><input type="email" required name="email" value="%%=v(@emailAddress)=%%"><br>
-      <label>Website: </label><input type="url" name="website" value="%%=v(@website)=%%"><br>
-      
-      <label>Gender: </label>
-      <input type="radio" name="gender" value="Male" %%=v(@genderMale)=%%> Male &nbsp;
-      <input type="radio" name="gender" value="Female" %%=v(@genderFemale)=%%> Female<br>
+
             
       <h2>Update your subscriptions:</h2>
-      <label>Preference: </label><input name="preference" value="true" type="checkbox" %%=v(@preference)=%%><br>
-      <label>Connection: </label><input name="connection" value="true" type="checkbox" %%=v(@connection)=%%><br>
-      <label>Newsletter: </label><input name="newsletter" value="true" type="checkbox" %%=v(@newsletter)=%%><br>
+      <label>Quarterly Newsletter: </label><input name="quarterlyNewsletter" value="true" type="checkbox" %%=v(@quarterlyNewsletter)=%%><br>
 
       <br/> <br/>
 
