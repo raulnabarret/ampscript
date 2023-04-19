@@ -4,6 +4,14 @@
 		margin: 0;
 	}
 
+	.header-wrapper {
+		margin-bottom: 0.5em;
+	}
+
+	.subheader-wrapper {
+		margin-bottom: 0.25em;
+	}
+
 	.wrapper {
 		display: flex;
 	    height: 100%;
@@ -29,25 +37,27 @@
 	}
 
 	.section-wrapper {
-	    padding: 2em 0;
-	    margin-bottom: 1em;
+	    margin-top: 1em;
 	    border-bottom: 1px solid #666;
+	    padding-bottom: 1em;
 	}
 
 	.input-wrapper {
 	    display: flex;
 	    flex-direction: column;
 	    width: 33%;
+	    padding-left: 0.5em;
 	}
 
 	.checkbox-wrapper {
 	    display: flex;
 	    flex-direction: row;
-	    width: 40%;
+	    padding-left: 0.5em;
 	}
 
 	.button-wrapper {
 		margin-top: 0.5em;
+		padding-left: 0.5em;
 	}
 
 	button {
@@ -62,11 +72,11 @@
 </style>
 <div class="wrapper">
 	<div class="content-wrapper">
-		<div>
+		<div class="header-wrapper">
 			<h1>Email Preference Center</h1>
 		</div>
 		<div class="section-wrapper">
-			<div>
+			<div class="subheader-wrapper">
 				<h2>Update Your Email Address</h2>	
 			</div>
 			<div class="input-wrapper">
@@ -79,7 +89,7 @@
 		</div>
 		<form>
 			<div class="section-wrapper">
-				<div>
+				<div class="subheader-wrapper">
 					<h2>Newsletters</h2>	
 				</div>
 				<div>
@@ -91,7 +101,7 @@
 			</div>	
 			<div class="section-wrapper">
 				<div>
-					<h2>Programs</h2>	
+					<h2 class="subheader-wrapper">Programs</h2>	
 				</div>
 				<div>
 					<div class="checkbox-wrapper">
