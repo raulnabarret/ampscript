@@ -243,13 +243,6 @@
         	ENDIF
 			SET @updateStatus2 = InvokeUpdate(@sub2)
 
-		    IF RequestParameter('allSubscriptions') == 'on' THEN
-		    	OUTPUT(V('UNSUBSCRIBED'))
-		    ELSE
-		    	OUTPUT(V('SUBSCRIBED'))
-		    ENDIF
-
-
 		]%%
 	}
 </script>
