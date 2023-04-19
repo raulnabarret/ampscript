@@ -3,6 +3,25 @@
 		text-transform: uppercase;
 	}
 
+	.wrapper {
+		display: flex;
+	}
+
+	.image-wrapper {
+		display: flex;
+	    flex-direction: column;
+	    justify-content: space-around;
+	    width: 50%;
+	    position: absolute;
+	    right: 0;
+	    height: 100%;
+	    top: 0;
+	}
+
+	img {
+		margin: 0 auto;
+	}
+
 	.content-wrapper {
 		font-family: 'Arial';
 	    height: 100%;
@@ -37,94 +56,95 @@
 	    border: none;
 	}
 </style>
+<div class="wrapper">
+	<div class="content-wrapper">
+	%%[	
+		SET @Random = RANDOM(100, 999)
+		SET @EmailAddress = 'raulnabarret@gmail.com'
 
-<div class="content-wrapper">
-%%[	
-	SET @Random = RANDOM(100, 999)
-	SET @EmailAddress = 'raulnabarret@gmail.com'
 
+		SET @rrObj = CreateObject("RetrieveRequest") 
 
-	SET @rrObj = CreateObject("RetrieveRequest") 
+		SetObjectProperty(@rrObj, "ObjectType", "Subscriber")
+		AddObjectArrayItem(@rrObj,"Properties","SubscriberKey")
 
-	SetObjectProperty(@rrObj, "ObjectType", "Subscriber")
-	AddObjectArrayItem(@rrObj,"Properties","SubscriberKey")
+		SET @cObj = CreateObject("SimpleFilterPart")
+		SetObjectProperty(@cObj, "Property", "SubscriberKey")
+		SetObjectProperty(@cObj, "SimpleOperator", "equals")
+		AddObjectArrayItem(@cObj, "Value",@EmailAddress)
 
-	SET @cObj = CreateObject("SimpleFilterPart")
-	SetObjectProperty(@cObj, "Property", "SubscriberKey")
-	SetObjectProperty(@cObj, "SimpleOperator", "equals")
-	AddObjectArrayItem(@cObj, "Value",@EmailAddress)
+		SetObjectProperty(@rrObj, "Filter", @cObj)
 
-	SetObjectProperty(@rrObj, "Filter", @cObj)
+		SET @ResultSet = InvokeRetrieve(@rrObj)
 
-	SET @ResultSet = InvokeRetrieve(@rrObj)
+		IF(Rowcount(@ResultSet)>0) THEN       
+		    SET @row = row(@ResultSet,1)        
+		    SET @Status = Field(@row,"Status")
+		ENDIF
 
-	IF(Rowcount(@ResultSet)>0) THEN       
-	    SET @row = row(@ResultSet,1)        
-	    SET @Status = Field(@row,"Status")
-	ENDIF
+	    SET @ListID = "12608"
+	    SET @SubscriberKey = @EmailAddress
+	 
+	    SET @rr = CreateObject("RetrieveRequest")
+	    SetObjectProperty(@rr,"ObjectType","ListSubscriber")
+	    AddObjectArrayItem(@rr,"Properties","SubscriberKey")
+	    AddObjectArrayItem(@rr,"Properties","ListID")
+	    
+	    SET @sfpl = CreateObject("SimpleFilterPart")
+	    SetObjectProperty(@sfpl,"Property","ListID")
+	    SetObjectProperty(@sfpl,"SimpleOperator","equals")
+	    AddObjectArrayItem(@sfpl,"Value",@ListID)
+	 
+	    SET @sfpr = CreateObject("SimpleFilterPart")
+	    SetObjectProperty(@sfpr,"Property","SubscriberKey")
+	    SetObjectProperty(@sfpr,"SimpleOperator","equals")
+	    AddObjectArrayItem(@sfpr,"Value",@SubscriberKey)
+	 
+	    SET @cf = CreateObject("ComplexFilterPart")
+	    SetObjectProperty(@cf,"LeftOperand",@sfpl)
+	    SetObjectProperty(@cf,"RightOperand",@sfpr)
+	    SetObjectProperty(@cf,"LogicalOperator","AND")
+	 
+	    SetObjectProperty(@rr,"Filter",@cf)
 
-    SET @ListID = "12608"
-    SET @SubscriberKey = @EmailAddress
- 
-    SET @rr = CreateObject("RetrieveRequest")
-    SetObjectProperty(@rr,"ObjectType","ListSubscriber")
-    AddObjectArrayItem(@rr,"Properties","SubscriberKey")
-    AddObjectArrayItem(@rr,"Properties","ListID")
-    
-    SET @sfpl = CreateObject("SimpleFilterPart")
-    SetObjectProperty(@sfpl,"Property","ListID")
-    SetObjectProperty(@sfpl,"SimpleOperator","equals")
-    AddObjectArrayItem(@sfpl,"Value",@ListID)
- 
-    SET @sfpr = CreateObject("SimpleFilterPart")
-    SetObjectProperty(@sfpr,"Property","SubscriberKey")
-    SetObjectProperty(@sfpr,"SimpleOperator","equals")
-    AddObjectArrayItem(@sfpr,"Value",@SubscriberKey)
- 
-    SET @cf = CreateObject("ComplexFilterPart")
-    SetObjectProperty(@cf,"LeftOperand",@sfpl)
-    SetObjectProperty(@cf,"RightOperand",@sfpr)
-    SetObjectProperty(@cf,"LogicalOperator","AND")
- 
-    SetObjectProperty(@rr,"Filter",@cf)
-
-]%%
-	<div>
-		<h1>Email Preference Center</h1>
+	]%%
+		<div>
+			<h1>Email Preference Center</h1>
+		</div>
+		<div>
+			<div>
+				<h2>Update Your Email Address</h2>	
+			</div>
+			<div class="input-wrapper">
+				<label>Email Address</label>
+				<input type="email" name="email" value="%%=v(@EmailAddress)=%%">
+			</div>
+			<div class="button-wrapper">
+				<button>Update</button>
+			</div>
+		</div>
+		<div>
+			<div>
+				<h2>Newsletters</h2>	
+			</div>
+			<div>
+				<form>
+					<div class="checkbox-wrapper">
+						<input type="checkbox" name="quarterlyNewsletters" id="quarterlyNewsletters">
+						<label for="quarterlyNewsletters">Quarterly Newsletters</label>
+					</div>
+					<div class="button-wrapper">
+						<button onclick="handleSubmitPreferences()">Save Preferences</button>
+					</div>
+				</form>
+			</div>
+		</div>	
 	</div>
-	<div>
-		<div>
-			<h2>Update Your Email Address</h2>	
-		</div>
-		<div class="input-wrapper">
-			<label>Email Address</label>
-			<input type="email" name="email" value="%%=v(@EmailAddress)=%%">
-		</div>
-		<div class="button-wrapper">
-			<button>Update</button>
-		</div>
+	<div class="image-wrapper">
+		<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/b3f98663-541a-4193-aeef-532127ba111d.png" />
+		<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/440d1024-6fac-43bd-ae2c-b92e6d51b3cb.png" />
 	</div>
-	<div>
-		<div>
-			<h2>Newsletters</h2>	
-		</div>
-		<div>
-			<form>
-				<div class="checkbox-wrapper">
-					<input type="checkbox" name="quarterlyNewsletters" id="quarterlyNewsletters">
-					<label for="quarterlyNewsletters">Quarterly Newsletters</label>
-				</div>
-				<div class="button-wrapper">
-					<button onclick="handleSubmitPreferences()">Save Preferences</button>
-				</div>
-			</form>
-		</div>
-	</div>	
-</div>
-<div class="image-wrapper">
-	<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/b3f98663-541a-4193-aeef-532127ba111d.png" />
-	<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/440d1024-6fac-43bd-ae2c-b92e6d51b3cb.png" />
-</div>
+</div>	
 <script type="text/javascript">
 	function handleSubmitPreferences() {
 		var quarterlyNewsletters = document.querySelector('#quarterlyNewsletters').checked;
