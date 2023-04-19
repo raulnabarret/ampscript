@@ -202,20 +202,10 @@
 
 			//All subscriptions
         	IF RequestParameter('allSubscriptions') == 'on'
-	    		SET @Status = 'Active'    
+	    		SET @SubscriberStatus = 'Active'    
     		ELSE	
-	    		SET @Status = 'Unsubscribed'    
-			ENDIF
-		    SET @sub2 = CreateObject("Subscriber")
-		    SetObjectProperty(@sub2,"EmailAddress", @EmailAddress)
-		    SetObjectProperty(@sub2,"SubscriberKey", @SubscriberKey)
-		    SetObjectProperty(@sub2,"Status",@Status)
-		    SET @options = CreateObject("UpdateOptions")
-		    SET @save = CreateObject("SaveOption")
-		    SetObjectProperty(@save,"SaveAction","UpdateAdd")
-		    SetObjectProperty(@save,"PropertyName","*")
-		    AddObjectArrayItem(@options,"SaveOptions", @save)
-		    SET @update_sub = InvokeUpdate(@sub2, @update_sub_status, @update_sub_errorcode, @options)		        
+	    		SET @SubscriberStatus = 'Unsubscribed'    
+			ENDIF        
 		]%%
 	}
 </script>
