@@ -1,6 +1,7 @@
 <style type="text/css">
 	h1, h2 {
 		text-transform: uppercase;
+		margin: 0;
 	}
 
 	.wrapper {
@@ -25,6 +26,12 @@
 	    width: 50%;
 	    background: #9bcace;
 	    padding: 1em;
+	}
+
+	.section-wrapper {
+	    padding: 2em 0;
+	    margin-bottom: 1em;
+	    border-bottom: 1px solid #666;
 	}
 
 	.input-wrapper {
@@ -55,6 +62,61 @@
 </style>
 <div class="wrapper">
 	<div class="content-wrapper">
+		<div>
+			<h1>Email Preference Center</h1>
+		</div>
+		<div class="section-wrapper">
+			<div>
+				<h2>Update Your Email Address</h2>	
+			</div>
+			<div class="input-wrapper">
+				<label>Email Address</label>
+				<input type="email" name="email" value="%%=v(@EmailAddress)=%%">
+			</div>
+			<div class="button-wrapper">
+				<button>Update</button>
+			</div>
+		</div>
+		<form>
+			<div class="section-wrapper">
+				<div>
+					<h2>Newsletters</h2>	
+				</div>
+				<div>
+					<div class="checkbox-wrapper">
+						<input type="checkbox" name="quarterlyNewsletters" id="quarterlyNewsletters">
+						<label for="quarterlyNewsletters">Quarterly Newsletters</label>
+					</div>
+				</div>
+			</div>	
+			<div class="section-wrapper">
+				<div>
+					<h2>Programs</h2>	
+				</div>
+				<div>
+					<div class="checkbox-wrapper">
+						<input type="checkbox" name="cdcAdvancedHIVDisease" id="cdcAdvancedHIVDisease">
+						<label for="cdcAdvancedHIVDisease">CDC Advanced HIV Disease</label>
+					</div>
+				</div>
+			</div>				
+			<div class="section-wrapper">
+				<div class="checkbox-wrapper">
+					<input type="checkbox" name="allSubscriptions" id="allSubscriptions">
+					<label for="allSubscriptions">Unsubscribe from all email communications</label>
+				</div>
+			</div>
+			<div class="button-wrapper">
+				<button onclick="handleSubmitPreferences()">Save Preferences</button>
+			</div>
+		</form>
+	</div>
+	<div class="image-wrapper">
+		<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/b3f98663-541a-4193-aeef-532127ba111d.png" />
+		<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/440d1024-6fac-43bd-ae2c-b92e6d51b3cb.png" />
+	</div>
+</div>	
+<script type="text/javascript">
 	%%[	
 		SET @Random = RANDOM(100, 999)
 		SET @EmailAddress = 'raulnabarret@gmail.com'
@@ -105,47 +167,9 @@
 	    SetObjectProperty(@rr,"Filter",@cf)
 
 	]%%
-		<div>
-			<h1>Email Preference Center</h1>
-		</div>
-		<div>
-			<div>
-				<h2>Update Your Email Address</h2>	
-			</div>
-			<div class="input-wrapper">
-				<label>Email Address</label>
-				<input type="email" name="email" value="%%=v(@EmailAddress)=%%">
-			</div>
-			<div class="button-wrapper">
-				<button>Update</button>
-			</div>
-		</div>
-		<div>
-			<div>
-				<h2>Newsletters</h2>	
-			</div>
-			<div>
-				<form>
-					<div class="checkbox-wrapper">
-						<input type="checkbox" name="quarterlyNewsletters" id="quarterlyNewsletters">
-						<label for="quarterlyNewsletters">Quarterly Newsletters</label>
-					</div>
-					<div class="button-wrapper">
-						<button onclick="handleSubmitPreferences()">Save Preferences</button>
-					</div>
-				</form>
-			</div>
-		</div>	
-	</div>
-	<div class="image-wrapper">
-		<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/b3f98663-541a-4193-aeef-532127ba111d.png" />
-		<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/440d1024-6fac-43bd-ae2c-b92e6d51b3cb.png" />
-	</div>
-</div>	
-<script type="text/javascript">
+
 	function handleSubmitPreferences() {
-		var quarterlyNewsletters = document.querySelector('#quarterlyNewsletters').checked;
-		console.log(quarterlyNewsletters);
+		//var quarterlyNewsletters = document.querySelector('#quarterlyNewsletters').checked;
 		%%[
 		 
 		    IF RequestParameter('quarterlyNewsletters') == 'on' THEN
@@ -163,8 +187,21 @@
 	        	SetObjectProperty(@lSub,"Status","Unsubscribed")
 	    		AddObjectArrayItem(@sub,"Lists",@lSub)	        
         	ENDIF
-		        
 			SET @updateStatus = InvokeUpdate(@sub)
+
+        	/*
+	    SET @Status = 'Active'    
+	    SET @sub2 = CreateObject("Subscriber")
+	    SetObjectProperty(@sub2,"EmailAddress", @EmailAddress)
+	    SetObjectProperty(@sub2,"SubscriberKey", @SubscriberKey)
+	    SetObjectProperty(@sub2,"Status",@Status)
+	    SET @options = CreateObject("UpdateOptions")
+	    SET @save = CreateObject("SaveOption")
+	    SetObjectProperty(@save,"SaveAction","UpdateAdd")
+	    SetObjectProperty(@save,"PropertyName","*")
+	    AddObjectArrayItem(@options,"SaveOptions", @save)
+	    SET @update_sub = InvokeUpdate(@sub2, @update_sub_status, @update_sub_errorcode, @options)*/
+		        
 
 		]%%
 	}
