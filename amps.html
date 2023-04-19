@@ -13,10 +13,7 @@
 	    flex-direction: column;
 	    justify-content: space-around;
 	    width: 50%;
-	    position: absolute;
-	    right: 0;
 	    height: 100%;
-	    top: 0;
 	}
 
 	img {
@@ -110,10 +107,7 @@
 	    SET @listFields = InvokeRetrieve(@rr)
 	    for @i = 1 to RowCount(@listFields) do
 
-		  set @dataExtensionField = Row(@listFields, @i)
-		  set @Status = Field(@dataExtensionField, "Status")
-
-		  output(concat("<br>Status: ", @Status))
+		  output(concat(@dataExtensionField))
 
 		next @i
 
