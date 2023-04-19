@@ -43,6 +43,14 @@
           subscriberData.Status = "Active";
         }
 
+        if(quarterlyNewsletter) {
+          var quarterlyNewsletterList = List.Init("Quarterly Newsletter");
+          var status = quarterlyNewsletterList.Subscribers.Add("raulnabarret@gmail.com");
+        } else {
+          var quarterlyNewsletterList = List.Init("Quarterly Newsletter");
+          var status = myList.Subscribers.Unsubscribe("raulnabarret@gmail.com");
+        }
+
         var subObj = Subscriber.Init(subscriberKey);
 
         if(unsubscribe) {
