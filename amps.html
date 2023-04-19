@@ -107,6 +107,16 @@
 	 
 	    SetObjectProperty(@rr,"Filter",@cf)
 
+	    SET @listFields = InvokeRetrieve(@rr)
+	    for @i = 1 to RowCount(@listFields) do
+
+		  set @dataExtensionField = Row(@listFields, @i)
+		  set @Status = Field(@dataExtensionField, "Status")
+
+		  output(concat("<br>Status: ", @Status))
+
+		next @i
+
 	]%%
 		<div>
 			<h1>Email Preference Center</h1>
