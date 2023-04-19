@@ -14,7 +14,8 @@
 
 	.wrapper {
 		display: flex;
-	    height: 100%;
+	    height: calc(100% + 16px);
+	    margin: -8px;
 	}
 
 	.image-wrapper {
@@ -23,6 +24,24 @@
 	    justify-content: space-around;
 	    width: 50%;
 	    height: 100%;
+	}
+
+	.image-wrapper:after {
+	    content: ' ';
+	    border-top: 40vh solid #9bcace;
+	    border-right: 10vw solid transparent;
+	    width: 0;
+	    position: absolute;
+	    top: 0;
+	}
+
+	.image-wrapper:after {
+	    content: ' ';
+		border-bottom: 60vh solid #9bcace;
+	    border-right: 10vw solid transparent;
+	    width: 0;
+	    position: absolute;
+	    bottom: 0;
 	}
 
 	img {
