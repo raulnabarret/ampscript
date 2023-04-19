@@ -28,6 +28,7 @@
 	}
 
 	button {
+		cursor: pointer;
 		background: #077a86;
 	    color: #fff;
 	    padding: 0.5em;
@@ -39,7 +40,6 @@
 
 <div class="content-wrapper">
 %%[	
-	//12608
 	SET @Random = RANDOM(100, 999)
 	SET @EmailAddress = 'raulnabarret@gmail.com'
 
@@ -87,21 +87,6 @@
     SetObjectProperty(@cf,"LogicalOperator","AND")
  
     SetObjectProperty(@rr,"Filter",@cf)
-    
-    SET @listFields = InvokeRetrieve(@rr)
-    for @i = 1 to RowCount(@listFields) do
-
-	  set @dataExtensionField = Row(@listFields, @i)
-	  set @Status = Field(@dataExtensionField, "Status")
-
-	  output(concat("<br>Status: ", @Status))
-
-	next @i
-    IF NOT(RowCount(@listFields)) AND @Status == 'Unsubscribe' THEN
-    	OUTPUT(V('NOT REGISTERED'))
-    ELSE
-		OUTPUT(V('REGISTERED'))
-	ENDIF	
 
 ]%%
 	<div>
@@ -135,6 +120,10 @@
 			</form>
 		</div>
 	</div>	
+</div>
+<div class="image-wrapper">
+	<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/b3f98663-541a-4193-aeef-532127ba111d.png" />
+	<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/440d1024-6fac-43bd-ae2c-b92e6d51b3cb.png" />
 </div>
 <script type="text/javascript">
 	function handleSubmitPreferences() {
