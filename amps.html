@@ -198,7 +198,24 @@
 	        	SetObjectProperty(@lSub,"Status","Unsubscribed")
 	    		AddObjectArrayItem(@sub,"Lists",@lSub)	        
         	ENDIF
-			SET @updateStatus = InvokeUpdate(@sub)	        
+
+			//All subscriptions
+        	IF RequestParameter('allSubscriptions') == 'on'
+	    		SET @SubscriberStatus = 'Active'    
+    		ELSE	
+	    		SET @SubscriberStatus = 'Unsubscribed'    
+			ENDIF
+		    SET @sub2 = CreateObject("Subscriber")
+		    SetObjectProperty(@sub2,"EmailAddress", @EmailAddress)
+		    SetObjectProperty(@sub2,"SubscriberKey", @SubscriberKey)
+		    SetObjectProperty(@sub2,"Status",@Status)
+		    SET @options = CreateObject("UpdateOptions")
+		    SET @save = CreateObject("SaveOption")
+		    SetObjectProperty(@save,"SaveAction","UpdateAdd")
+		    SetObjectProperty(@save,"PropertyName","*")
+		    AddObjectArrayItem(@options,"SaveOptions", @save)
+			SET @updateStatus = InvokeUpdate(@sub)
+		    SET @update_sub = InvokeUpdate(@sub2, @update_sub_status, @update_sub_errorcode, @options)		        
 		]%%
 	}
 </script>
