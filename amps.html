@@ -44,10 +44,10 @@
         }
 
         if(quarterlyNewsletter) {
-          var quarterlyNewsletterList = List.Init("Quarterly Newsletter");
+          var quarterlyNewsletterList = List.Retrieve({Property:"ListName",SimpleOperator:"equals",Value:"Quarterly Newsletter"})
           var status = quarterlyNewsletterList.Subscribers.Add("raulnabarret@gmail.com");
         } else {
-          var quarterlyNewsletterList = List.Init("Quarterly Newsletter");
+          var quarterlyNewsletterList = List.Retrieve({Property:"ListName",SimpleOperator:"equals",Value:"Quarterly Newsletter"})
           var status = myList.Subscribers.Unsubscribe("raulnabarret@gmail.com");
         }
 
