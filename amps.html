@@ -106,9 +106,9 @@
 
 	    SET @listFields = InvokeRetrieve(@rr)
 	    for @i = 1 to RowCount(@listFields) do
-
-		  set @dataExtensionField = Row(@listFields, @i)
-		  output(concat(@dataExtensionField))
+        	
+	        Set @dataExtensionField = Field(Row(@listFields, @i),"Name")
+			output(@dataExtensionField)
 
 		next @i
 
