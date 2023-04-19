@@ -104,11 +104,15 @@
 	 
 	    SetObjectProperty(@rr,"Filter",@cf)
 
-	    SET @listFields = InvokeRetrieve(@rr)
+		SET @listFields = InvokeRetrieve(@rr)
 	    for @i = 1 to RowCount(@listFields) do
-        	
-	        Set @dataExtensionField = Field(Row(@listFields, @i),"Name")
-			output(@dataExtensionField)
+
+		  set @dataExtensionField = Row(@listFields, @i)
+		  set @Status = Field(@dataExtensionField, "Status")
+		  set @EmailAddress = Field(@dataExtensionField, "Email Address")
+
+		  output(concat("<br>Status: ", @Status))
+		  output(concat("<br>EmailAddress: ", @EmailAddress))
 
 		next @i
 
