@@ -1,28 +1,7 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
-    />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  </head>
-  <body>
+
     %%[ 
       SET @subscriberKey = 'raulnabarret@gmail.com' 
-      
-      // PROFILE ATTRIBUTES 
-      SET @firstName = [First Name] 
-      SET @lastName = [Last Name] 
-      SET @emailAddress = [Email Address] 
-      SET @website = [Website]       
-      SET @genderMale = IIF([Gender] == "Male", "checked", "")
-      SET @genderFemale = IIF([Gender] == "Female", "checked", "")
-
-      // PREFERENCE ATTRIBUTES 
-      SET @preference = IIF([Preference], "checked", "")
-      SET @connection = IIF([Connection], "checked", "")
-      SET @newsletter = IIF([Send Email Newsletter], "checked", "")
+     
     ]%%
 
     <script runat="server" language="JavaScript">
@@ -148,6 +127,4 @@
         </script>
     %%[ ELSE ]%%
     %%[ ENDIF ]%%
-  </body>
-</html>
 
