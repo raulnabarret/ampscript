@@ -182,7 +182,7 @@
 	function handleSubmitPreferences() {
 		//var quarterlyNewsletters = document.querySelector('#quarterlyNewsletters').checked;
 		%%[
-		 
+		 	
 		    IF RequestParameter('quarterlyNewsletters') == 'on' THEN
 		        SET @sub = CreateObject("Subscriber")
 		        SetObjectProperty(@sub,"SubscriberKey",@SubscriberKey)
@@ -199,6 +199,50 @@
 	    		AddObjectArrayItem(@sub,"Lists",@lSub)	        
         	ENDIF
 			SET @updateStatus = InvokeUpdate(@sub)
+
+			/*
+			 *ListCdcAdvancedHIVDiseaseID
+			*/
+		    SET @ListCdcAdvancedHIVDiseaseID = "12630"
+		    SET @rr2 = CreateObject("RetrieveRequest")
+		    SetObjectProperty(@rr2,"ObjectType","ListSubscriber")
+		    AddObjectArrayItem(@rr2,"Properties","SubscriberKey")
+		    AddObjectArrayItem(@rr2,"Properties","ListID")
+		    
+		    SET @sfpl2 = CreateObject("SimpleFilterPart")
+		    SetObjectProperty(@sfpl2,"Property","ListID")
+		    SetObjectProperty(@sfpl2,"SimpleOperator","equals")
+		    AddObjectArrayItem(@sfpl2,"Value",@ListCdcAdvancedHIVDiseaseID)
+		 
+		    SET @sfpr2 = CreateObject("SimpleFilterPart")
+		    SetObjectProperty(@sfpr2,"Property","SubscriberKey")
+		    SetObjectProperty(@sfpr2,"SimpleOperator","equals")
+		    AddObjectArrayItem(@sfpr2,"Value",@SubscriberKey)
+		 
+		    SET @cf2 = CreateObject("ComplexFilterPart")
+		    SetObjectProperty(@cf2,"LeftOperand",@sfpl)
+		    SetObjectProperty(@cf2,"RightOperand",@sfpr)
+		    SetObjectProperty(@cf2,"LogicalOperator","AND")
+		 
+		    SetObjectProperty(@rr2,"Filter",@cf2)
+
+		    IF RequestParameter('cdcAdvancedHIVDisease') == 'on' THEN
+		        SET @sub2 = CreateObject("Subscriber")
+		        SetObjectProperty(@sub2,"SubscriberKey",@SubscriberKey)
+		        set @lSub2 = CreateObject("SubscriberList")
+		        SetObjectProperty(@lSub2,"ID",@ListCdcAdvancedHIVDiseaseID)
+		        SetObjectProperty(@lSub2,"Status","Active")
+	    		AddObjectArrayItem(@sub2,"Lists",@lSub2)
+	        ELSE
+		        SET @sub2 = CreateObject("Subscriber")
+		        SetObjectProperty(@sub2,"SubscriberKey",@SubscriberKey)
+		        set @lSub2 = CreateObject("SubscriberList")
+		        SetObjectProperty(@lSub2,"ID",@ListID)
+	        	SetObjectProperty(@lSub2,"Status","Unsubscribed")
+	    		AddObjectArrayItem(@sub2,"Lists",@lSub2)	        
+        	ENDIF
+			SET @updateStatus2 = InvokeUpdate(@sub2)
+
 		]%%
 	}
 </script>
