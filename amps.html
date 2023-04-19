@@ -1,276 +1,153 @@
-<script runat="server" language="javascript">
-	Platform.Load("core","1.1.5");
-</script>
-<style type="text/css">
-	h1, h2 {
-		text-transform: uppercase;
-		margin: 0;
-	}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+    />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    %%[ 
+      SET @subscriberKey = 'raulnabarret@gmail.com' 
+      
+      // PROFILE ATTRIBUTES 
+      SET @firstName = [First Name] 
+      SET @lastName = [Last Name] 
+      SET @emailAddress = [Email Address] 
+      SET @website = [Website]       
+      SET @genderMale = IIF([Gender] == "Male", "checked", "")
+      SET @genderFemale = IIF([Gender] == "Female", "checked", "")
 
-	.header-wrapper {
-		margin-bottom: 2em;
-	}
+      // PREFERENCE ATTRIBUTES 
+      SET @preference = IIF([Preference], "checked", "")
+      SET @connection = IIF([Connection], "checked", "")
+      SET @newsletter = IIF([Send Email Newsletter], "checked", "")
+    ]%%
 
-	.subheader-wrapper {
-		margin-bottom: 0.25em;
-	}
+    <script runat="server" language="JavaScript">
+      Platform.Load("core","1.1.2");
 
-	.wrapper {
-		display: flex;
-	    height: calc(100% + 16px);
-	    margin: -8px;
-	}
+      var subscriptionStatus = Subscriber.Retrieve({
+        Property: "SubscriberKey",
+        SimpleOperator: "equals",
+        Value: Variable.GetValue("@subscriberKey")
+      });
 
-	.image-wrapper {
-		display: flex;
-	    flex-direction: column;
-	    justify-content: space-around;
-	    width: 50%;
-	    height: 100%;
-	}
+      if(subscriptionStatus[0].Status == "Active") {
+        Variable.SetValue("subscriptionStatus", true);
+      } else {
+        Variable.SetValue("subscriptionStatus", false);
+      }
+    
+      // POST VARIABLES
+      var subscriberKey = Platform.Request.GetFormField('subscriberKey') || "";
+      var firstName = Platform.Request.GetFormField('firstName') || "";
+      var lastName = Platform.Request.GetFormField('lastName') || "";
+      var email = Platform.Request.GetFormField('email') || "";
+      var website = Platform.Request.GetFormField('website') || "";
+      var gender = Platform.Request.GetFormField('gender') || "";
+      var preference = Platform.Request.GetFormField('preference') || false;
+      var connection = Platform.Request.GetFormField('connection') || false;
+      var newsletter = Platform.Request.GetFormField('newsletter') || false;
+      var unsubscribe = Platform.Request.GetFormField('unsubscribe') || false;
+      var subscribeTo = Platform.Request.GetFormField('subscribe') || false;
 
-	.image-wrapper:after {
-	    content: ' ';
-	    border-top: 40vh solid #9bcace;
-	    border-right: 10vw solid transparent;
-	    width: 0;
-	    position: absolute;
-	    top: 0;
-	}
+      if(subscriberKey) {
+        var subscriberData = {
+          "Attributes": {
+            "First Name" : firstName, 
+            "Last Name" : lastName,
+            "Website" : website,
+            "Preference" : preference,
+            "Connection" : connection,
+            "Send Email Newsletter" : newsletter
+          }
+        };
 
-	.image-wrapper:after {
-	    content: ' ';
-		border-bottom: 60vh solid #9bcace;
-	    border-right: 10vw solid transparent;
-	    width: 0;
-	    position: absolute;
-	    bottom: 0;
-	}
+        if(gender != "") {
+          subscriberData.Attributes.Gender = gender;
+        }
 
-	img {
-		margin: 0 auto;
-	}
+        if(subscribeTo) {
+          subscriberData.Status = "Active";
+        }
 
-	.content-wrapper {
-		font-family: 'Arial';
-	    width: 50%;
-	    background: #9bcace;
-	    padding: 2em;
-	}
+        var subObj = Subscriber.Init(subscriberKey);
 
-	.section-wrapper {
-	    margin-top: 1em;
-	    border-bottom: 1px solid #666;
-	    padding-bottom: 1em;
-	}
+        if(unsubscribe) {
+          var unsubscribeSatus = subObj.Unsubscribe();
+          Variable.SetValue("unsubscribeSatus", unsubscribeSatus);
+        } else {
+          var updateStatus = subObj.Update(subscriberData);
+          Variable.SetValue("unsubscribeSatus", (subscribeTo && updateStatus)?"SUBSCRIBED":"NA");
+          Variable.SetValue("updateStatus", updateStatus);
+        }
+        
+        Variable.SetValue("formSubmitted", true);
+      } else {
+        Variable.SetValue("formSubmitted", false);
+      }
+    </script>
 
-	.input-wrapper {
-	    display: flex;
-	    flex-direction: column;
-	    width: 33%;
-	    padding-left: 0.5em;
-	}
+    <form method="POST">
+      <input type="hidden" name="subscriberKey" value="%%=v(@subscriberkey)=%%">
+      
+      <h2>Update your profile:</h2>
+      <label>First Name: </label><input type="text" name="firstName" value="%%=v(@firstName)=%%"><br>
+      <label>Last Name: </label><input type="text" name="lastName" value="%%=v(@lastName)=%%"><br>
+      <label>* Email: </label><input type="email" required name="email" value="%%=v(@emailAddress)=%%"><br>
+      <label>Website: </label><input type="url" name="website" value="%%=v(@website)=%%"><br>
+      
+      <label>Gender: </label>
+      <input type="radio" name="gender" value="Male" %%=v(@genderMale)=%%> Male &nbsp;
+      <input type="radio" name="gender" value="Female" %%=v(@genderFemale)=%%> Female<br>
+            
+      <h2>Update your subscriptions:</h2>
+      <label>Preference: </label><input name="preference" value="true" type="checkbox" %%=v(@preference)=%%><br>
+      <label>Connection: </label><input name="connection" value="true" type="checkbox" %%=v(@connection)=%%><br>
+      <label>Newsletter: </label><input name="newsletter" value="true" type="checkbox" %%=v(@newsletter)=%%><br>
 
-	input {
-		border: none;
-		padding: 6px;
-	}
+      <br/> <br/>
 
-	.checkbox-wrapper {
-	    display: flex;
-	    flex-direction: row;
-	    padding-left: 0.5em;
-	}
+      <label>%%=IIF(@subscriptionStatus, "Unsubscribe from all", "Resubscribe")=%%</label>
+      <input name='%%=IIF(@subscriptionStatus, "unsubscribe", "subscribe")=%%' value="true" type="checkbox"><br>
+      (You are %%=IIF(@subscriptionStatus, "subscribed to", "unsubscribed from")=%% us!)
 
-	.button-wrapper {
-		margin-top: 0.5em;
-		padding-left: 0.5em;
-	}
+      <br/> <br/>
 
-	button {
-		cursor: pointer;
-		background: #077a86;
-	    color: #fff;
-	    padding: 0.5em;
-	    min-width: 150px;
-	    border-radius: 0;
-	    border: none;
-	}
-</style>
-<script type="text/javascript">
-		%%[	
-		SET @Random = RANDOM(100, 999)
-		SET @EmailAddress = 'raulnabarret@gmail.com'
+      <input type="submit" value="Update">
 
+    </form>
 
-		SET @rrObj = CreateObject("RetrieveRequest") 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.3.5/dist/sweetalert2.all.min.js"></script>
 
-		SetObjectProperty(@rrObj, "ObjectType", "Subscriber")
-		AddObjectArrayItem(@rrObj,"Properties","SubscriberKey")
-
-		SET @cObj = CreateObject("SimpleFilterPart")
-		SetObjectProperty(@cObj, "Property", "SubscriberKey")
-		SetObjectProperty(@cObj, "SimpleOperator", "equals")
-		AddObjectArrayItem(@cObj, "Value",@EmailAddress)
-
-		SetObjectProperty(@rrObj, "Filter", @cObj)
-
-		SET @ResultSet = InvokeRetrieve(@rrObj)
-
-		IF(Rowcount(@ResultSet)>0) THEN       
-		    SET @row = row(@ResultSet,1)        
-		    SET @Status = Field(@row,"Status")
-		ENDIF
-
-	    SET @ListID = "12608"
-	    SET @SubscriberKey = @EmailAddress
-	 
-	    SET @rr = CreateObject("RetrieveRequest")
-	    SetObjectProperty(@rr,"ObjectType","ListSubscriber")
-	    AddObjectArrayItem(@rr,"Properties","SubscriberKey")
-	    AddObjectArrayItem(@rr,"Properties","ListID")
-	    
-	    SET @sfpl = CreateObject("SimpleFilterPart")
-	    SetObjectProperty(@sfpl,"Property","ListID")
-	    SetObjectProperty(@sfpl,"SimpleOperator","equals")
-	    AddObjectArrayItem(@sfpl,"Value",@ListID)
-	 
-	    SET @sfpr = CreateObject("SimpleFilterPart")
-	    SetObjectProperty(@sfpr,"Property","SubscriberKey")
-	    SetObjectProperty(@sfpr,"SimpleOperator","equals")
-	    AddObjectArrayItem(@sfpr,"Value",@SubscriberKey)
-	 
-	    SET @cf = CreateObject("ComplexFilterPart")
-	    SetObjectProperty(@cf,"LeftOperand",@sfpl)
-	    SetObjectProperty(@cf,"RightOperand",@sfpr)
-	    SetObjectProperty(@cf,"LogicalOperator","AND")
-	 
-	    SetObjectProperty(@rr,"Filter",@cf)
-
-	]%%
-</script>
-<div class="wrapper">
-	<div class="content-wrapper">
-		<div class="header-wrapper">
-			<h1>Email Preference Center</h1>
-		</div>
-		<div class="section-wrapper" style="border: none;">
-			<div class="subheader-wrapper">
-				<h2>Update Your Email Address</h2>	
-			</div>
-			<div class="input-wrapper">
-				<label>Email Address</label>
-				<input type="email" name="email" value="%%=v(@EmailAddress)=%%">
-			</div>
-			<div class="button-wrapper">
-				<button>Update</button>
-			</div>
-		</div>
-		<form>
-			<div class="section-wrapper">
-				<div class="subheader-wrapper">
-					<h2>Newsletters</h2>	
-				</div>
-				<div>
-					<div class="checkbox-wrapper">
-						<input type="checkbox" name="quarterlyNewsletters" id="quarterlyNewsletters">
-						<label for="quarterlyNewsletters">Quarterly Newsletters</label>
-					</div>
-				</div>
-			</div>	
-			<div class="section-wrapper">
-				<div>
-					<h2 class="subheader-wrapper">Programs</h2>	
-				</div>
-				<div>
-					<div class="checkbox-wrapper">
-						<input type="checkbox" name="cdcAdvancedHIVDisease" id="cdcAdvancedHIVDisease">
-						<label for="cdcAdvancedHIVDisease">CDC Advanced HIV Disease</label>
-					</div>
-				</div>
-			</div>				
-			<div class="section-wrapper" style="border: none;">
-				<div class="checkbox-wrapper">
-					<input type="checkbox" name="allSubscriptions" id="allSubscriptions">
-					<label for="allSubscriptions">Unsubscribe from all email communications</label>
-				</div>
-			</div>
-			<div class="button-wrapper">
-				<button onclick="handleSubmitPreferences()">Save Preferences</button>
-			</div>
-		</form>
-	</div>
-	<div class="image-wrapper">
-		<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/b3f98663-541a-4193-aeef-532127ba111d.png" />
-		<img src="https://image.s12.sfmc-content.com/lib/fe28117371640475771d78/m/1/440d1024-6fac-43bd-ae2c-b92e6d51b3cb.png" />
-	</div>
-</div>	
-<script type="text/javascript">
-	function handleSubmitPreferences() {
-		//var quarterlyNewsletters = document.querySelector('#quarterlyNewsletters').checked;
-		%%[
-		 	
-		    IF RequestParameter('quarterlyNewsletters') == 'on' THEN
-		        SET @sub = CreateObject("Subscriber")
-		        SetObjectProperty(@sub,"SubscriberKey",@SubscriberKey)
-		        set @lSub = CreateObject("SubscriberList")
-		        SetObjectProperty(@lSub,"ID",@ListID)
-		        SetObjectProperty(@lSub,"Status","Active")
-	    		AddObjectArrayItem(@sub,"Lists",@lSub)
-	        ELSE
-		        SET @sub = CreateObject("Subscriber")
-		        SetObjectProperty(@sub,"SubscriberKey",@SubscriberKey)
-		        set @lSub = CreateObject("SubscriberList")
-		        SetObjectProperty(@lSub,"ID",@ListID)
-	        	SetObjectProperty(@lSub,"Status","Unsubscribed")
-	    		AddObjectArrayItem(@sub,"Lists",@lSub)	        
-        	ENDIF
-			SET @updateStatus = InvokeUpdate(@sub)
-
-			/*
-			 *ListCdcAdvancedHIVDiseaseID
-			*/
-		    SET @ListCdcAdvancedHIVDiseaseID = "12630"
-		    SET @rr2 = CreateObject("RetrieveRequest")
-		    SetObjectProperty(@rr2,"ObjectType","ListSubscriber")
-		    AddObjectArrayItem(@rr2,"Properties","SubscriberKey")
-		    AddObjectArrayItem(@rr2,"Properties","ListID")
-		    
-		    SET @sfpl2 = CreateObject("SimpleFilterPart")
-		    SetObjectProperty(@sfpl2,"Property","ListID")
-		    SetObjectProperty(@sfpl2,"SimpleOperator","equals")
-		    AddObjectArrayItem(@sfpl2,"Value",@ListCdcAdvancedHIVDiseaseID)
-		 
-		    SET @sfpr2 = CreateObject("SimpleFilterPart")
-		    SetObjectProperty(@sfpr2,"Property","SubscriberKey")
-		    SetObjectProperty(@sfpr2,"SimpleOperator","equals")
-		    AddObjectArrayItem(@sfpr2,"Value",@SubscriberKey)
-		 
-		    SET @cf2 = CreateObject("ComplexFilterPart")
-		    SetObjectProperty(@cf2,"LeftOperand",@sfpl)
-		    SetObjectProperty(@cf2,"RightOperand",@sfpr)
-		    SetObjectProperty(@cf2,"LogicalOperator","AND")
-		 
-		    SetObjectProperty(@rr2,"Filter",@cf2)
-
-		    IF RequestParameter('cdcAdvancedHIVDisease') == 'on' THEN
-		        SET @sub2 = CreateObject("Subscriber")
-		        SetObjectProperty(@sub2,"SubscriberKey",@SubscriberKey)
-		        set @lSub2 = CreateObject("SubscriberList")
-		        SetObjectProperty(@lSub2,"ID",@ListCdcAdvancedHIVDiseaseID)
-		        SetObjectProperty(@lSub2,"Status","Active")
-	    		AddObjectArrayItem(@sub2,"Lists",@lSub2)
-	        ELSE
-		        SET @sub2 = CreateObject("Subscriber")
-		        SetObjectProperty(@sub2,"SubscriberKey",@SubscriberKey)
-		        set @lSub2 = CreateObject("SubscriberList")
-		        SetObjectProperty(@lSub2,"ID",@ListCdcAdvancedHIVDiseaseID)
-	        	SetObjectProperty(@lSub2,"Status","Unsubscribed")
-	    		AddObjectArrayItem(@sub2,"Lists",@lSub2)	        
-        	ENDIF
-			SET @updateStatus2 = InvokeUpdate(@sub2)
-
-		]%%
-	}
-</script>
+    %%[ IF @formSubmitted AND @updateStatus == "OK" AND @unsubscribeSatus == "NA" THEN ]%%
+        <script>
+          Swal.fire("Updated!", "Your preferences are updated successfully", "success").then(() => {
+            location.href = location.href;
+          });
+        </script>
+    %%[ ELSEIF @formSubmitted AND @updateStatus != "OK" AND @unsubscribeSatus == "NA" THEN ]%%
+        <script>
+          Swal.fire("Not Updated!", "Something went wrong while updating your preferences", "error").then(() => {
+            location.href = location.href;
+          });
+        </script>
+    %%[ ELSEIF @formSubmitted AND @unsubscribeSatus == "OK" THEN ]%%
+        <script>
+          Swal.fire("Unsubscribed!", "Sorry to see you go away!", "info").then(() => {
+            location.href = location.href;
+          });
+        </script>
+    %%[ ELSEIF @formSubmitted AND @unsubscribeSatus == "SUBSCRIBED" THEN ]%%
+        <script>
+          Swal.fire("Subscribed!", "Happy to see you again!<br/>We make sure we don't spam you!!", "success").then(() => {
+            location.href = location.href;
+          });
+        </script>
+    %%[ ELSE ]%%
+    %%[ ENDIF ]%%
+  </body>
+</html>
 
